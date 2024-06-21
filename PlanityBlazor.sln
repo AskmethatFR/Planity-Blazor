@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanityBlazor.BlazorApp", "PlanityBlazor.BlazorApp\PlanityBlazor.BlazorApp.csproj", "{F731367C-30C7-4633-9309-2D1207A9AFA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanityBlazorApp.BlazorAppTest", "PlanityBlazorApp.BlazorAppTest\PlanityBlazorApp.BlazorAppTest.csproj", "{D3F3519A-F5D2-4822-BA6E-E73A8B235B7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F731367C-30C7-4633-9309-2D1207A9AFA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F731367C-30C7-4633-9309-2D1207A9AFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F731367C-30C7-4633-9309-2D1207A9AFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F731367C-30C7-4633-9309-2D1207A9AFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F3519A-F5D2-4822-BA6E-E73A8B235B7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F3519A-F5D2-4822-BA6E-E73A8B235B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F3519A-F5D2-4822-BA6E-E73A8B235B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F3519A-F5D2-4822-BA6E-E73A8B235B7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

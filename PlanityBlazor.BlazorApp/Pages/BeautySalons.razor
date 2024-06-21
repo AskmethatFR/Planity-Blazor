@@ -1,0 +1,30 @@
+@page "/BeautySalons"
+@using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
+
+@inject AllBeautySalonQuery AllBeautySalonQuery
+
+
+<h3>BeautySalons 3</h3>
+@if (beautySalons is not null)
+{
+    <div>
+        <ul>
+            @foreach (string salon in beautySalons)
+            {
+                <li>@salon</li>
+            }
+        </ul>
+
+    </div>
+}
+
+@code {
+
+    private List<string> beautySalons;
+
+    protected override async Task OnInitializedAsync()
+    {
+        beautySalons = await AllBeautySalonQuery.Handle();
+    }
+
+}
