@@ -1,30 +1,34 @@
 @page "/BeautySalons"
+@using Fluxor
 @using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-@inject AllBeautySalonQuery AllBeautySalonQuery
+@inject IDispatcher Dispatcher
+@inject IState<MyState> MyState
 
 
-<h3>BeautySalons 3</h3>
-@if (beautySalons is not null)
+<h3>BeautySalons</h3>
+@if (MyState.Value.Progress)
+{
+    <span>Loading...</span>
+}
+@if (MyState.Value.Salons.Any())
 {
     <div>
         <ul>
-            @foreach (string salon in beautySalons)
+            @foreach (string salon in MyState.Value.Salons)
             {
                 <li>@salon</li>
             }
         </ul>
-
     </div>
 }
 
 @code {
 
-    private List<string> beautySalons;
-
     protected override async Task OnInitializedAsync()
     {
-        beautySalons = await AllBeautySalonQuery.Handle();
+        Dispatcher.Dispatch(new GetSalonsAction());
     }
 
 }
