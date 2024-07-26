@@ -1,0 +1,32 @@
+@using PlanityBlazor.BlazorApp.BeautySalonContext
+
+@if (ViewModel.Status is ViewModelState.Progress)
+{
+    <div>@ViewModel.LoadingMessage</div>
+}
+
+@if (ViewModel.Status is ViewModelState.Nothing)
+{
+    <div>@ViewModel.NothingMessage</div>
+}
+
+@if (ViewModel.Status is ViewModelState.Error)
+{
+    <div>@ViewModel.ErrorMessage</div>
+}
+
+@if (ViewModel.Status is ViewModelState.Completed)
+{
+    <ul>
+        @foreach (var bs in ViewModel.BeautySalons)
+        {
+            <li>
+                @bs
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public BeautySalonsViewModel ViewModel { get; set; }
+}

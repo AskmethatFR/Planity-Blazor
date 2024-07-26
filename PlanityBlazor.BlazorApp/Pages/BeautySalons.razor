@@ -3,27 +3,15 @@
 @using PlanityBlazor.BlazorApp.BeautySalonContext
 @using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
 @using PlanityBlazor.BlazorApp.Shared.Reactive
+@using PlanityBlazor.BlazorApp.Components
 
 @inject IDispatcher Dispatcher
 @inject AppSelector<MyState, BeautySalonsViewModel> AppSelector
 @implements IDisposable
 
 <h3>BeautySalons</h3>
-@if (_viewModel.InProgress)
-{
-    <span>Loading...</span>
-}
-@if (_viewModel.BeautySalons.Any())
-{
-    <div>
-        <ul>
-            @foreach (string salon in _viewModel.BeautySalons)
-            {
-                <li>@salon</li>
-            }
-        </ul>
-    </div>
-}
+<BeautySalonListComponent ViewModel="_viewModel" />
+
 <button @onclick="() => { Dispatcher.Dispatch(new GetSalonsAction()); }">Reload</button>
 
 @code {

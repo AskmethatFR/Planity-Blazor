@@ -28,7 +28,7 @@ public class BeautySalonsBeautySelectorTests
         var beautySalonsViewModel = beautySalonSelector.OnNext(_currentState);
 
         //assert
-        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel());
+        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel(){Status = ViewModelState.Nothing, NothingMessage = "Nothing here"});
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class BeautySalonsBeautySelectorTests
         var beautySalonsViewModel = beautySalonSelector.OnNext(_currentState);
         
         //assert
-        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel() {InProgress = true});
+        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel() { Status = ViewModelState.Progress, LoadingMessage = "Loading..."});
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class BeautySalonsBeautySelectorTests
         var beautySalonsViewModel = beautySalonSelector.OnNext(_currentState);
 
         //assert
-        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel(){BeautySalons = ["A beauty salon", "a second beauty salon"]});
+        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel(){BeautySalons = ["A beauty salon", "a second beauty salon"], Status = ViewModelState.Completed});
     }
 
     private void ThenShouldHaveExpectedSalons(BeautySalonsViewModel beautySalonsViewModel,
@@ -90,6 +90,6 @@ public class BeautySalonsBeautySelectorTests
         var beautySalonsViewModel = beautySalonSelector.OnError(new Exception());
         
         //assert
-        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel(){Error = true});
+        ThenShouldHaveExpectedSalons(beautySalonsViewModel, new BeautySalonsViewModel(){ Status = ViewModelState.Error, ErrorMessage = "An error occured"});
     }
 }

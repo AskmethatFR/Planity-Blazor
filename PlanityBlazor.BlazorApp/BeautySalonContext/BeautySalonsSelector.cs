@@ -11,12 +11,18 @@ public record BeautySalonsSelector : IReactiveSelector<MyState, BeautySalonsView
 
     public BeautySalonsViewModel OnNext(MyState value)
     {
-       return _currentBeautySalons with { BeautySalons = value.Salons, InProgress = value.Progress, Error = false};
+        if (value.Progress)
+            return this._currentBeautySalons with { Status = ViewModelState.Progress, LoadingMessage = "Loading..."};
+
+        if (value.Salons.Any())
+            return this._currentBeautySalons with { Status = ViewModelState.Completed, BeautySalons = value.Salons };
+
+        return _currentBeautySalons with { Status = ViewModelState.Nothing, NothingMessage = "Nothing here"};
     }
 
     public BeautySalonsViewModel OnError(Exception exception)
     {
-       return _currentBeautySalons with { Error = true };
+        return _currentBeautySalons with { Status = ViewModelState.Error, ErrorMessage = "An error occured"};
     }
 
     public BeautySalonsViewModel OnCompleted()
