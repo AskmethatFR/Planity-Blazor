@@ -1,34 +1,62 @@
 @page "/BeautySalons"
 @using Fluxor
+@using PlanityBlazor.BlazorApp.BeautySalonContext
 @using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
-@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@using PlanityBlazor.BlazorApp.Shared.Reactive
 
 @inject IDispatcher Dispatcher
-@inject IState<MyState> MyState
-
+@inject AppSelector<MyState, BeautySalonsViewModel> AppSelector
+@implements IDisposable
 
 <h3>BeautySalons</h3>
-@if (MyState.Value.Progress)
+@if (_viewModel.InProgress)
 {
     <span>Loading...</span>
 }
-@if (MyState.Value.Salons.Any())
+@if (_viewModel.BeautySalons.Any())
 {
     <div>
         <ul>
-            @foreach (string salon in MyState.Value.Salons)
+            @foreach (string salon in _viewModel.BeautySalons)
             {
                 <li>@salon</li>
             }
         </ul>
     </div>
 }
+<button @onclick="() => { Dispatcher.Dispatch(new GetSalonsAction()); }">Reload</button>
 
 @code {
 
+    private BeautySalonsViewModel _viewModel = new BeautySalonsViewModel();
+    private IDisposable _subscription;
     protected override async Task OnInitializedAsync()
     {
+        _subscription = AppSelector.Subscribe(OnNext());
         Dispatcher.Dispatch(new GetSalonsAction());
+    }
+
+    private Action<BeautySalonsViewModel> OnNext()
+    {
+        return state =>
+        {
+            _viewModel = state;
+            StateHasChanged();
+        };
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _subscription.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
 }

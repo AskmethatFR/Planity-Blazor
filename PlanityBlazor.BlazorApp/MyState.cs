@@ -26,7 +26,6 @@ public class GetSalonsActionEffect
     [EffectMethod]
     public async Task Handle(GetSalonsAction action, IDispatcher dispatcher)
     {
-        // await Task.Delay(1500);
         dispatcher.Dispatch(new GetSalonsActionCompleteEffect(await this.gateway.GetBeautySalonsAsync()));
     }
 

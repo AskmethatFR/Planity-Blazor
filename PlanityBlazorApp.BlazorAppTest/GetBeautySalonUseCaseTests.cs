@@ -6,11 +6,11 @@ using PlanityBlazor.BlazorApp.Pages;
 
 namespace PlanityBlazorApp.BlazorAppTest;
 
-public class GetBeautySalonUseCase
+public class GetBeautySalonUseCaseTests
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public GetBeautySalonUseCase()
+    public GetBeautySalonUseCaseTests()
     {
         IServiceCollection services = new ServiceCollection();
         services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly));

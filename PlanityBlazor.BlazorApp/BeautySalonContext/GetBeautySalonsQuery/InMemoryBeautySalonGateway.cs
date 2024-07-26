@@ -2,10 +2,17 @@ namespace PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 public class InMemoryBeautySalonGateway : IBeautySalonGateway
 {
+    private readonly TimeSpan _delay;
+
+    public InMemoryBeautySalonGateway(int delay = 0)
+    {
+        _delay = TimeSpan.FromMilliseconds(delay);
+    }
     public List<string> All { get; set; } = new List<string>();
 
-    public Task<List<string>> GetBeautySalonsAsync()
+    public async Task<List<string>> GetBeautySalonsAsync()
     {
-        return Task.FromResult(All);
+        await Task.Delay(_delay);
+        return await Task.FromResult(All);
     }
 }

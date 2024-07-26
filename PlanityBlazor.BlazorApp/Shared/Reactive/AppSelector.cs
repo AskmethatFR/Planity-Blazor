@@ -1,19 +1,33 @@
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
+using Microsoft.AspNetCore.Components;
+
 namespace PlanityBlazor.BlazorApp.Shared.Reactive;
 
-public delegate TReturnType Selector<in TState, out TReturnType>(TState state);
-
-public class AppSelector<TState, TReturnType, TSelector> where TSelector : ReactiveSelector<TState, TReturnType>
+public class AppSelector<TState, TReturnType> : IObservable<TReturnType>
+    where TState : class
+    where TReturnType : class
 {
-    private readonly TState _state;
-    private readonly TReturnType _returnType;
-    private readonly Selector<TState, TReturnType> _selector;
+    private readonly IState<TState> _state;
+    private readonly IReactiveSelector<TState, TReturnType> _subject;
 
-    public AppSelector(TState state)
+    public AppSelector(IState<TState> state, IReactiveSelector<TState, TReturnType> subject)
     {
         _state = state;
-        _selector = currentState =>
-            ((TSelector)Activator.CreateInstance(typeof(TSelector), new object[] { state })).Get();
+        _subject = subject;
     }
-
-    public TReturnType Select() => _selector(_state);
+    
+    public IDisposable Subscribe(IObserver<TReturnType> observer)
+    {
+        _state.StateChanged += (sender, _) =>
+        {
+            observer.OnNext(_subject.OnNext(((IState<TState>)sender).Value));
+        };
+        
+        return System.Reactive.Disposables.Disposable.Empty; 
+    }
 }

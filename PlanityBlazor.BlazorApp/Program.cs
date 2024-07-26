@@ -3,7 +3,9 @@ using Fluxor.Blazor.Web.ReduxDevTools;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using PlanityBlazor.BlazorApp;
+using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
+using PlanityBlazor.BlazorApp.Shared.Reactive;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,12 +16,14 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddFluxor(options =>
 {
     options.ScanAssemblies(typeof(Program).Assembly);
-    options.UseReduxDevTools(); 
+    options.UseReduxDevTools();
 });
+builder.Services.AddScoped(typeof(IReactiveSelector<MyState, BeautySalonsViewModel>), typeof(BeautySalonsSelector));
+builder.Services.AddScoped(typeof(AppSelector<,>));
 builder.Services.AddScoped<AllBeautySalonQuery>();
 builder.Services.AddScoped<IBeautySalonGateway>(_ =>
 {
-    var inMemorySalonGateway = new InMemoryBeautySalonGateway();
+    var inMemorySalonGateway = new InMemoryBeautySalonGateway(1500);
     inMemorySalonGateway.All = new List<string>()
     {
         "Salon 1",
@@ -35,4 +39,6 @@ builder.Services.AddScoped<IBeautySalonGateway>(_ =>
 
 await builder.Build().RunAsync();
 
-public partial class Program{}
+public partial class Program
+{
+}
