@@ -5,11 +5,11 @@ using PlanityBlazor.BlazorApp.Shared.Reactive;
 
 namespace PlanityBlazor.BlazorApp.BeautySalonContext;
 
-public record BeautySalonsSelector : IReactiveSelector<MyState, BeautySalonsViewModel>
+public record BeautySalonsSelector : IReactiveSelector<BeautySalonState, BeautySalonsViewModel>
 {
     private readonly BeautySalonsViewModel _currentBeautySalons = new BeautySalonsViewModel();
 
-    public BeautySalonsViewModel OnNext(MyState value)
+    public BeautySalonsViewModel OnNext(BeautySalonState value)
     {
         if (value.Progress)
             return this._currentBeautySalons with { Status = ViewModelState.Progress, LoadingMessage = "Loading..."};

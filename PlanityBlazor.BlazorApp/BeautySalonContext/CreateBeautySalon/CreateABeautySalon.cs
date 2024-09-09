@@ -5,10 +5,10 @@ namespace PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 
 public class CreateABeautySalon
 {
-    private readonly IState<MyState> _beautySalonState;
+    private readonly IState<BeautySalonState> _beautySalonState;
     private readonly InMemoryBeautySalonGateway _beautySalonGateway;
 
-    public CreateABeautySalon(IState<MyState> beautySalonState, InMemoryBeautySalonGateway beautySalonGateway)
+    public CreateABeautySalon(IState<BeautySalonState> beautySalonState, InMemoryBeautySalonGateway beautySalonGateway)
     {
         _beautySalonState = beautySalonState;
         _beautySalonGateway = beautySalonGateway;

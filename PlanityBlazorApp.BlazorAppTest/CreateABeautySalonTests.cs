@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp;
+using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
@@ -36,9 +37,9 @@ public class CreateABeautySalonTests
         beautySalonGateway.All.Should().Contain(expectedBeautySalon);
     }
     
-    private (InMemoryBeautySalonGateway beautySalonGateway, CreateABeautySalon sut, IState<MyState>) InMemoryBeautySalonGateway()
+    private (InMemoryBeautySalonGateway beautySalonGateway, CreateABeautySalon sut, IState<BeautySalonState>) InMemoryBeautySalonGateway()
     {
-        var beautySalonState = _serviceProvider.GetRequiredService<IState<MyState>>();
+        var beautySalonState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
         InMemoryBeautySalonGateway beautySalonGateway = (_serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway)!;
         var sut = new CreateABeautySalon(beautySalonState, beautySalonGateway);
         return (beautySalonGateway, sut, beautySalonState);

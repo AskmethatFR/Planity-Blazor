@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp;
+using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
@@ -25,7 +26,7 @@ public class GetBeautySalonUseCaseTests
     [Fact]
     public void ShouldHaveNoBeautySalons()
     {
-        var beautyState = _serviceProvider.GetRequiredService<IState<MyState>>();
+        var beautyState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
         beautyState.Value.Salons.Should().BeEmpty();
         beautyState.Value.Progress.Should().BeFalse();
     }
@@ -45,7 +46,7 @@ public class GetBeautySalonUseCaseTests
 
         WhenBeautySalonAreGet();
 
-        var beautyState = _serviceProvider.GetRequiredService<IState<MyState>>();
+        var beautyState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
         beautyState.Value.Salons.Should().BeEquivalentTo(expectedBeautySalons);
         beautyState.Value.Progress.Should().BeFalse();
     }

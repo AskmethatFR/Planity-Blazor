@@ -6,8 +6,8 @@ namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 public class BeautySalonsBeautySelectorTests
 {
  
-    private MyState _currentState;
-    private BeautySalonsSelector InitStoreBoilerplate(MyState state)
+    private BeautySalonState _currentState;
+    private BeautySalonsSelector InitStoreBoilerplate(BeautySalonState state)
     {
         _currentState = state;
         return new BeautySalonsSelector();
@@ -17,7 +17,7 @@ public class BeautySalonsBeautySelectorTests
     public void InitialBeautySalonsViewModelShouldHaveAnySalons()
     {
         //arrange
-        var beautySalonSelector = InitStoreBoilerplate(new MyState());
+        var beautySalonSelector = InitStoreBoilerplate(new BeautySalonState());
         
         //act
         var beautySalonsViewModel = beautySalonSelector.OnNext(_currentState);
@@ -30,7 +30,7 @@ public class BeautySalonsBeautySelectorTests
     public void ShouldBeProgressTrueOnLoading()
     {
         //arrange
-        var beautySalonSelector = InitStoreBoilerplate(new MyState()
+        var beautySalonSelector = InitStoreBoilerplate(new BeautySalonState()
         {
             Progress = true
         });
@@ -46,7 +46,7 @@ public class BeautySalonsBeautySelectorTests
     public void CompleteGetSalonsEffectShouldUpdateViewModel()
     {
         //arrange
-        var beautySalonSelector = InitStoreBoilerplate(new MyState()
+        var beautySalonSelector = InitStoreBoilerplate(new BeautySalonState()
         {
             Salons = new List<string>()
             {
@@ -71,7 +71,7 @@ public class BeautySalonsBeautySelectorTests
     [Fact]
     public void WhenErrorShouldHaveItToTrue()
     {
-        var beautySalonSelector = InitStoreBoilerplate(new MyState()
+        var beautySalonSelector = InitStoreBoilerplate(new BeautySalonState()
         {
             Salons = new List<string>()
             {

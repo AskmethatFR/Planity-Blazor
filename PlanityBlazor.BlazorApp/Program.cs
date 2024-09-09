@@ -18,7 +18,7 @@ builder.Services.AddFluxor(options =>
     options.ScanAssemblies(typeof(Program).Assembly);
     options.UseReduxDevTools();
 });
-builder.Services.AddScoped(typeof(IReactiveSelector<MyState, BeautySalonsViewModel>), typeof(BeautySalonsSelector));
+builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>), typeof(BeautySalonsSelector));
 builder.Services.AddScoped(typeof(AppSelector<,>));
 builder.Services.AddScoped<AllBeautySalonQuery>();
 builder.Services.AddScoped<IBeautySalonGateway>(_ =>
