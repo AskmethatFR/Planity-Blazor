@@ -3,7 +3,7 @@ using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.Components;
 using static PlanityBlazor.BlazorApp.ViewModelState;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 
 public class BeautySalonListComponentTest : TestContext
 {

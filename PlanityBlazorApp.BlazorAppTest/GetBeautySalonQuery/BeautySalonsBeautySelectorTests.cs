@@ -1,12 +1,7 @@
-using Fluxor;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
-using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
-using PlanityBlazor.BlazorApp.Shared.Reactive;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 
 public class BeautySalonsBeautySelectorTests
 {

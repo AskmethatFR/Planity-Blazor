@@ -1,6 +1,6 @@
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 
 public class AllBeautySalonQueryTests
 {
