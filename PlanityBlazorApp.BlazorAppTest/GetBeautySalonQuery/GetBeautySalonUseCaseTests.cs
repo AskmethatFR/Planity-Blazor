@@ -7,27 +7,12 @@ using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 
-public class GetBeautySalonUseCaseTests
+public class GetBeautySalonUseCaseTests : Fixture
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public GetBeautySalonUseCaseTests()
-    {
-        IServiceCollection services = new ServiceCollection();
-        services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly));
-
-        services.AddScoped<IBeautySalonGateway, InMemoryBeautySalonGateway>();
-
-        _serviceProvider = services.BuildServiceProvider();
-
-        var store = _serviceProvider.GetRequiredService<IStore>();
-        store.InitializeAsync().Wait();
-    }
-
     [Fact]
     public void ShouldHaveNoBeautySalons()
     {
-        var beautyState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
+        var beautyState = ServiceProvider.GetRequiredService<IState<BeautySalonState>>();
         beautyState.Value.Salons.Should().BeEmpty();
         beautyState.Value.Progress.Should().BeFalse();
     }
@@ -48,21 +33,21 @@ public class GetBeautySalonUseCaseTests
 
         WhenBeautySalonAreGet();
 
-        var beautyState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
+        var beautyState = ServiceProvider.GetRequiredService<IState<BeautySalonState>>();
         beautyState.Value.Salons.Should().BeEquivalentTo(expectedBeautySalons);
         beautyState.Value.Progress.Should().BeFalse();
     }
 
     private void WhenBeautySalonAreGet()
     {
-        var dispatcher = _serviceProvider.GetRequiredService<IDispatcher>();
+        var dispatcher = ServiceProvider.GetRequiredService<IDispatcher>();
         dispatcher.Dispatch(new GetSalonsAction());
     }
 
     private void GivenBeautySalonInGateway(List<string> beautySalons)
     {
         var inMemoryBeautySalonGateway =
-            _serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway;
+            ServiceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway;
         inMemoryBeautySalonGateway.All = beautySalons;
     }
 }
