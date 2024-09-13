@@ -17,9 +17,9 @@ public class CreateABeautySalonTests
         services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly));
 
         services.AddScoped<IBeautySalonGateway, InMemoryBeautySalonGateway>();
-        
+
         _serviceProvider = services.BuildServiceProvider();
-        
+
         var store = _serviceProvider.GetRequiredService<IStore>();
         store.InitializeAsync().Wait();
     }
@@ -28,31 +28,32 @@ public class CreateABeautySalonTests
     [Fact]
     public void ShouldCreateABeautySalon()
     {
-        var (beautySalonGateway, sut, beautySalonState) = InMemoryBeautySalonGateway();
+        var sut = _serviceProvider.GetRequiredService<IDispatcher>();
         var expectedBeautySalon = "A beauty salon";
 
-        sut.Execute(expectedBeautySalon);
+        sut.Dispatch(new CreateABeautySalonAction(expectedBeautySalon));
 
-        beautySalonState.Value.Salons.Should().Contain(expectedBeautySalon);
-        beautySalonGateway.All.Should().Contain(expectedBeautySalon);
-    }
-    
-    private (InMemoryBeautySalonGateway beautySalonGateway, CreateABeautySalon sut, IState<BeautySalonState>) InMemoryBeautySalonGateway()
-    {
+        var beautySalonGateway =
+            (_serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway)!;
         var beautySalonState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
-        InMemoryBeautySalonGateway beautySalonGateway = (_serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway)!;
-        var sut = new CreateABeautySalon(beautySalonState, beautySalonGateway);
-        return (beautySalonGateway, sut, beautySalonState);
+
+        beautySalonState.Value.Salons.Should().ContainEquivalentOf(new BeautySalon(expectedBeautySalon));
+        beautySalonGateway.All.Should().Contain(expectedBeautySalon);
     }
 
     [Fact]
     public void ShouldNotCreateABeautySalon()
     {
-        var (beautySalonGateway, sut, beautySalonState) = InMemoryBeautySalonGateway();
+        var sut = _serviceProvider.GetRequiredService<IDispatcher>();
+        var expectedBeautySalon = "A beauty salon";
+        var beautySalonGateway =
+            (_serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway)!;
+
         beautySalonGateway.PostReturnsError = true;
-        
-        sut.Execute("A beauty salon");
-        
-        beautySalonState.Value.Salons.Should().NotContain("A beauty salon");
+
+        sut.Dispatch(new CreateABeautySalonAction(expectedBeautySalon));
+
+        var beautySalonState = _serviceProvider.GetRequiredService<IState<BeautySalonState>>();
+        beautySalonState.Value.Salons.Should().NotContain(new BeautySalon(expectedBeautySalon));
     }
 }

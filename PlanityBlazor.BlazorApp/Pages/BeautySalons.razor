@@ -1,6 +1,7 @@
 @page "/BeautySalons"
 @using Fluxor
 @using PlanityBlazor.BlazorApp.BeautySalonContext
+@using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon
 @using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
 @using PlanityBlazor.BlazorApp.Shared.Reactive
 @using PlanityBlazor.BlazorApp.Components
@@ -10,14 +11,18 @@
 @implements IDisposable
 
 <h3>BeautySalons</h3>
-<BeautySalonListComponent ViewModel="_viewModel" />
+<BeautySalonListComponent ViewModel="_viewModel"/>
 
 <button @onclick="() => { Dispatcher.Dispatch(new GetSalonsAction()); }">Reload</button>
+<button @onclick="@(() => { Dispatcher.Dispatch(new CreateABeautySalonAction("A new salon")); })">
+    Create a new salon
+</button>
 
 @code {
 
     private BeautySalonsViewModel _viewModel = new BeautySalonsViewModel();
     private IDisposable _subscription;
+
     protected override async Task OnInitializedAsync()
     {
         _subscription = AppSelector.Subscribe(OnNext());

@@ -2,5 +2,6 @@ namespace PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 public interface IBeautySalonGateway
 {
-    Task<List<string>> GetBeautySalonsAsync();
+    Task<List<BeautySalon>> GetBeautySalonsAsync();
+    bool PostBeautySalon(BeautySalon beautySalon);
 }

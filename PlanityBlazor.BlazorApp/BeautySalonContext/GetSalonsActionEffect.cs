@@ -3,8 +3,8 @@ using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 namespace PlanityBlazor.BlazorApp.BeautySalonContext;
 
+public record GetSalonsActionCompleteEffect(List<string> Salons, List<BeautySalon> Salons2);
 
-public record GetSalonsActionCompleteEffect(List<string> Salons);
 public record GetSalonsAction();
 
 public class GetSalonsActionEffect
@@ -19,12 +19,14 @@ public class GetSalonsActionEffect
     [EffectMethod]
     public async Task Handle(GetSalonsAction action, IDispatcher dispatcher)
     {
-        dispatcher.Dispatch(new GetSalonsActionCompleteEffect(await _gateway.GetBeautySalonsAsync()));
+        var beautySalons = await _gateway.GetBeautySalonsAsync();
+        dispatcher.Dispatch(new GetSalonsActionCompleteEffect(beautySalons.Select(x => x.Name).ToList(), beautySalons));
     }
 
     [ReducerMethod]
-    public static BeautySalonState ReduceGetSalonsActionCompleteEffect(BeautySalonState state, GetSalonsActionCompleteEffect action) =>
-        state with { Salons = action.Salons, Progress = false };
+    public static BeautySalonState ReduceGetSalonsActionCompleteEffect(BeautySalonState state,
+        GetSalonsActionCompleteEffect action) =>
+        state with { Progress = false, Salons = action.Salons2 };
 
     [ReducerMethod]
     public static BeautySalonState ReduceGetSalonsAction(BeautySalonState state, GetSalonsAction action) =>

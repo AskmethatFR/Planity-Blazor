@@ -9,7 +9,7 @@ public class AllBeautySalonQuery
         _beautySalonGateway = beautySalonGateway;
     }
 
-    public Task<List<string>> Handle()
+    public Task<List<BeautySalon>> Handle()
     {
         return _beautySalonGateway.GetBeautySalonsAsync();
     }

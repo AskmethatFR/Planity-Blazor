@@ -4,39 +4,39 @@ namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
 
 public class AllBeautySalonQueryTests
 {
-
     [Fact]
     public async Task ShouldHaveNoBeautySalons()
     {
         var inMemoryBeautySalonGateway = GivenBeautySalonInGateway(new List<string>());
-        
+
         var result = await WhenBeautySalonAreGet(inMemoryBeautySalonGateway);
-        
+
         result.Should().BeEmpty();
     }
-    
+
     [Fact]
     public async Task ShouldHaveExpectedBeautySalons()
     {
-        var expectedBeautySalons = new List<string>
+        var expectedBeautySalons = new List<BeautySalon>
         {
-            "BeautySalon1",
-            "BeautySalon2",
-            "BeautySalon3",
-            "BeautySalon4",
+            new BeautySalon("BeautySalon1"),
+            new BeautySalon("BeautySalon2"),
+            new BeautySalon("BeautySalon3"),
+            new BeautySalon("BeautySalon4")
         };
-        
-        var inMemoryBeautySalonGateway = GivenBeautySalonInGateway(expectedBeautySalons);
+
+        var beautySalonsNames = expectedBeautySalons.Select(x => x.Name).ToList();
+        var inMemoryBeautySalonGateway = GivenBeautySalonInGateway(beautySalonsNames);
 
         var result = await WhenBeautySalonAreGet(inMemoryBeautySalonGateway);
 
         result.Should().BeEquivalentTo(expectedBeautySalons);
     }
 
-    private Task<List<string>> WhenBeautySalonAreGet(InMemoryBeautySalonGateway inMemoryBeautySalonGateway)
+    private async Task<List<BeautySalon>> WhenBeautySalonAreGet(InMemoryBeautySalonGateway inMemoryBeautySalonGateway)
     {
         var sut = new AllBeautySalonQuery(inMemoryBeautySalonGateway);
-        var result = sut.Handle();
+        var result = await sut.Handle();
         return result;
     }
 

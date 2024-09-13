@@ -2,6 +2,7 @@ using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
+using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
 namespace PlanityBlazorApp.BlazorAppTest.GetBeautySalonQuery;
@@ -16,9 +17,9 @@ public class GetBeautySalonUseCaseTests
         services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly));
 
         services.AddScoped<IBeautySalonGateway, InMemoryBeautySalonGateway>();
-        
+
         _serviceProvider = services.BuildServiceProvider();
-        
+
         var store = _serviceProvider.GetRequiredService<IStore>();
         store.InitializeAsync().Wait();
     }
@@ -30,19 +31,20 @@ public class GetBeautySalonUseCaseTests
         beautyState.Value.Salons.Should().BeEmpty();
         beautyState.Value.Progress.Should().BeFalse();
     }
-    
+
     [Fact]
     public void ShouldHaveExpectedBeautySalons()
     {
-        var expectedBeautySalons = new List<string>
+        var expectedBeautySalons = new List<BeautySalon>
         {
-            "BeautySalon1",
-            "BeautySalon2",
-            "BeautySalon3",
-            "BeautySalon4",
+            new BeautySalon("BeautySalon1"),
+            new BeautySalon("BeautySalon2"),
+            new BeautySalon("BeautySalon3"),
+            new BeautySalon("BeautySalon4"),
         };
-        
-        GivenBeautySalonInGateway(expectedBeautySalons);
+
+        var beautySalons = expectedBeautySalons.Select(s => s.Name).ToList();
+        GivenBeautySalonInGateway(beautySalons);
 
         WhenBeautySalonAreGet();
 
@@ -53,13 +55,14 @@ public class GetBeautySalonUseCaseTests
 
     private void WhenBeautySalonAreGet()
     {
-       var dispatcher = _serviceProvider.GetRequiredService<IDispatcher>();
-       dispatcher.Dispatch(new GetSalonsAction());
+        var dispatcher = _serviceProvider.GetRequiredService<IDispatcher>();
+        dispatcher.Dispatch(new GetSalonsAction());
     }
 
     private void GivenBeautySalonInGateway(List<string> beautySalons)
     {
-        var inMemoryBeautySalonGateway = _serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway;
+        var inMemoryBeautySalonGateway =
+            _serviceProvider.GetRequiredService<IBeautySalonGateway>() as InMemoryBeautySalonGateway;
         inMemoryBeautySalonGateway.All = beautySalons;
     }
 }
