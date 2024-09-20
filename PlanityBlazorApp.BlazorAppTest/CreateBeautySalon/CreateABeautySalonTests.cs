@@ -1,11 +1,10 @@
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
-using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.CreateBeautySalon;
 
 public class CreateABeautySalonTests : Fixture
 {

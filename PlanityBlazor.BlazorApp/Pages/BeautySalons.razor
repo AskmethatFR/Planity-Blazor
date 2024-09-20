@@ -2,12 +2,12 @@
 @using Fluxor
 @using PlanityBlazor.BlazorApp.BeautySalonContext
 @using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon
-@using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
 @using PlanityBlazor.BlazorApp.Shared.Reactive
 @using PlanityBlazor.BlazorApp.Components
 
 @inject IDispatcher Dispatcher
 @inject AppSelector<BeautySalonState, BeautySalonsViewModel> AppSelector
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
 <h3>BeautySalons</h3>
@@ -16,6 +16,10 @@
 <button @onclick="() => { Dispatcher.Dispatch(new GetSalonsAction()); }">Reload</button>
 <button @onclick="@(() => { Dispatcher.Dispatch(new CreateABeautySalonAction("A new salon")); })">
     Create a new salon
+</button>
+
+<button @onclick="@(() => NavigationManager.NavigateTo("CreateBeautySalon"))" id="navigateToCreateBeautySalonButton">Go
+    to create a new salon
 </button>
 
 @code {

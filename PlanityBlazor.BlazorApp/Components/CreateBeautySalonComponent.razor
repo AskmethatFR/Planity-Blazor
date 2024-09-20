@@ -1,0 +1,37 @@
+@using Fluxor
+@using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon
+@inject IDispatcher Dispatcher
+@inject NavigationManager NavigationManager
+@inject IActionSubscriber ActionSubscriber
+
+@implements IDisposable
+
+<h3>CreateBeautySalonComponent</h3>
+
+<InputText id="beautySalonNameInput" @bind-Value="Name"/>
+
+<button @onclick="@CreateBeautySalon" id="createBeautySalonButton">Add</button>
+
+@code {
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ActionSubscriber.SubscribeToAction<CreateABeautySalonCompleteAction>(this, _ => { NavigationManager.NavigateTo("/BeautySalons"); });
+        }
+    }
+
+    public string? Name { get; set; }
+
+    private void CreateBeautySalon()
+    {
+        Dispatcher.Dispatch(new CreateABeautySalonAction(Name));
+    }
+
+    public void Dispose()
+    {
+        ActionSubscriber.UnsubscribeFromAllActions(this);
+    }
+
+}

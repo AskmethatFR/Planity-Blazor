@@ -18,12 +18,13 @@ builder.Services.AddFluxor(options =>
     options.ScanAssemblies(typeof(Program).Assembly);
     options.UseReduxDevTools();
 });
-builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>), typeof(BeautySalonsSelector));
+builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>),
+    typeof(BeautySalonsSelector));
 builder.Services.AddScoped(typeof(AppSelector<,>));
 builder.Services.AddScoped<AllBeautySalonQuery>();
 builder.Services.AddScoped<IBeautySalonGateway>(_ =>
 {
-    var inMemorySalonGateway = new InMemoryBeautySalonGateway(1500);
+    var inMemorySalonGateway = new InMemoryBeautySalonGateway(0);
     inMemorySalonGateway.All = new List<string>()
     {
         "Salon 1",
