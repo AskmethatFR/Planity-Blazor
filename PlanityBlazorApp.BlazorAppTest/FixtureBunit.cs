@@ -2,6 +2,7 @@ using Bunit;
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
+using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 using PlanityBlazor.BlazorApp.Shared.Reactive;
 
@@ -21,6 +22,10 @@ public class FixtureBunit : TestContext
         Services.AddScoped<IBeautySalonGateway, InMemoryBeautySalonGateway>();
         Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>),
             typeof(BeautySalonsSelector));
+
+        Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreationError>),
+            typeof(IsBeautySalonsCreationError));
+
         Services.AddScoped(typeof(AppSelector<,>));
 
         var store = Services.GetRequiredService<IStore>();

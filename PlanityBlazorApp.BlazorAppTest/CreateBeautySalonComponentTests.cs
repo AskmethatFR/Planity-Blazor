@@ -38,6 +38,19 @@ public class CreateBeautySalonComponentTests : FixtureBunit
         navigationManager.Uri.Should().Be("http://localhost/BeautySalons");
     }
 
+
+    [Fact]
+    public void ShouldShowErrorWhenBeautySalonNameIsEmpty()
+    {
+        var cut = RenderComponent<CreateBeautySalonComponent>();
+
+        var button = cut.Find("#createBeautySalonButton");
+        button.Click();
+
+        var error = cut.Find("#beauty-salon-name-error");
+        error.Should().NotBeNull();
+    }
+
     private void AssertValueOnBeautySalonTest()
     {
         var state = Services.GetRequiredService<IState<BeautySalonState>>();

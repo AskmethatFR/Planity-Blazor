@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
+using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 using PlanityBlazor.BlazorApp.Shared.Reactive;
 
@@ -20,6 +21,11 @@ builder.Services.AddFluxor(options =>
 });
 builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>),
     typeof(BeautySalonsSelector));
+
+builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreationError>),
+    typeof(IsBeautySalonsCreationError));
+
+
 builder.Services.AddScoped(typeof(AppSelector<,>));
 builder.Services.AddScoped<AllBeautySalonQuery>();
 builder.Services.AddScoped<IBeautySalonGateway>(_ =>
