@@ -6,6 +6,7 @@ using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
+using PlanityBlazor.BlazorApp.Components;
 using PlanityBlazor.BlazorApp.Shared.Reactive;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -22,15 +23,15 @@ builder.Services.AddFluxor(options =>
 builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>),
     typeof(BeautySalonsSelector));
 
-builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreationError>),
-    typeof(IsBeautySalonsCreationError));
+builder.Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreateBeautySalonViewModel>),
+    typeof(CreateBeautySalonSelector));
 
 
 builder.Services.AddScoped(typeof(AppSelector<,>));
 builder.Services.AddScoped<AllBeautySalonQuery>();
 builder.Services.AddScoped<IBeautySalonGateway>(_ =>
 {
-    var inMemorySalonGateway = new InMemoryBeautySalonGateway(0);
+    var inMemorySalonGateway = new InMemoryBeautySalonGateway(500);
     inMemorySalonGateway.All = new List<string>()
     {
         "Salon 1",

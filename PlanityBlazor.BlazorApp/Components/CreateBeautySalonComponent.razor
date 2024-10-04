@@ -1,13 +1,8 @@
 @using Fluxor
-@using PlanityBlazor.BlazorApp.BeautySalonContext
 @using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon
-@using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery
-@using PlanityBlazor.BlazorApp.Shared.Reactive
 @inject IDispatcher Dispatcher
 @inject NavigationManager NavigationManager
 @inject IActionSubscriber ActionSubscriber
-@inject IState<BeautySalonState> BeautySalonState
-@inject AppSelector<BeautySalonState, CreationError> AppSelector
 
 
 @implements IDisposable
@@ -15,33 +10,25 @@
 <h3>CreateBeautySalonComponent</h3>
 
 <InputText id="beautySalonNameInput" @bind-Value="Name"/>
-@if (_isError)
+@if (CreateBeautySalonViewModel.State == ViewModelState.Error)
 {
-    <span id="beauty-salon-name-error" class="blazor-error-boundary">@BeautySalonState.Value.Error</span>
+    <span id="beauty-salon-name-error" class="blazor-error-boundary">@CreateBeautySalonViewModel.Message</span>
 }
 
 
-<button @onclick="@CreateBeautySalon" id="createBeautySalonButton">Add</button>
+<button @onclick="@CreateBeautySalon" id="createBeautySalonButton">
+    @if (CreateBeautySalonViewModel.State == ViewModelState.Progress)
+    {
+        <span>Loading...</span>
+    }
+    else
+    {
+        <span>Create</span>
+    }
+</button>
 
 @code {
-    private IDisposable _subscription;
-    private bool _isError;
-
-    protected override void OnInitialized()
-    {
-        _subscription = AppSelector.Subscribe(OnNext());
-        Dispatcher.Dispatch(new GetSalonsAction());
-    }
-
-
-    private Action<CreationError> OnNext()
-    {
-        return state =>
-        {
-            _isError = state.IsError;
-            StateHasChanged();
-        };
-    }
+    [Parameter] public required CreateBeautySalonViewModel CreateBeautySalonViewModel { get; set; }
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -61,7 +48,6 @@
     public void Dispose()
     {
         ActionSubscriber.UnsubscribeFromAllActions(this);
-        _subscription.Dispose();
     }
 
 }

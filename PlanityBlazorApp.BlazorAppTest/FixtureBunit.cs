@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
+using PlanityBlazor.BlazorApp.Components;
 using PlanityBlazor.BlazorApp.Shared.Reactive;
 
 namespace PlanityBlazorApp.BlazorAppTest;
@@ -23,8 +24,8 @@ public class FixtureBunit : TestContext
         Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, BeautySalonsViewModel>),
             typeof(BeautySalonsSelector));
 
-        Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreationError>),
-            typeof(IsBeautySalonsCreationError));
+        Services.AddScoped(typeof(IReactiveSelector<BeautySalonState, CreateBeautySalonViewModel>),
+            typeof(CreateBeautySalonSelector));
 
         Services.AddScoped(typeof(AppSelector<,>));
 

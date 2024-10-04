@@ -1,9 +1,7 @@
 using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using PlanityBlazor.BlazorApp.Components;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.CreateBeautySalon;
 
 public class CreateBeautySalonPageTest : FixtureBunit
 {

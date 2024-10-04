@@ -1,21 +1,22 @@
 using AngleSharp.Dom;
 using Bunit;
-using FluentAssertions.Common;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
 using PlanityBlazor.BlazorApp.Components;
 
-namespace PlanityBlazorApp.BlazorAppTest;
+namespace PlanityBlazorApp.BlazorAppTest.CreateBeautySalon;
 
 public class CreateBeautySalonComponentTests : FixtureBunit
 {
     [Fact]
     public void ShouldHaveBeautySalonNameInputWithCorrectUserSetValue()
     {
-        var cut = RenderComponent<CreateBeautySalonComponent>();
+        var cut = RenderComponent<CreateBeautySalonComponent>(option =>
+            option.Add(a => a.CreateBeautySalonViewModel, new CreateBeautySalonViewModel()));
 
         var input = FindAndUpdateBeautySalonInput(cut);
 
@@ -26,7 +27,8 @@ public class CreateBeautySalonComponentTests : FixtureBunit
     [Fact]
     public void ShouldUpdateStoreValueOnButtonClick()
     {
-        var cut = RenderComponent<CreateBeautySalonComponent>();
+        var cut = RenderComponent<CreateBeautySalonComponent>(option =>
+            option.Add(a => a.CreateBeautySalonViewModel, new CreateBeautySalonViewModel()));
 
         FindAndUpdateBeautySalonInput(cut);
 
@@ -42,13 +44,30 @@ public class CreateBeautySalonComponentTests : FixtureBunit
     [Fact]
     public void ShouldShowErrorWhenBeautySalonNameIsEmpty()
     {
-        var cut = RenderComponent<CreateBeautySalonComponent>();
-
-        var button = cut.Find("#createBeautySalonButton");
-        button.Click();
+        var cut = RenderComponent<CreateBeautySalonComponent>(option =>
+            option.Add(a => a.CreateBeautySalonViewModel, new CreateBeautySalonViewModel()
+            {
+                State = ViewModelState.Error,
+                Message = "Beauty Salon Name is required"
+            }));
 
         var error = cut.Find("#beauty-salon-name-error");
         error.Should().NotBeNull();
+        error.TextContent.Should().Be("Beauty Salon Name is required");
+    }
+
+    [Fact]
+    public void ShouldBeLoadingInButton()
+    {
+        var cut = RenderComponent<CreateBeautySalonComponent>(option =>
+            option.Add(a => a.CreateBeautySalonViewModel, new CreateBeautySalonViewModel()
+            {
+                State = ViewModelState.Progress,
+                Message = "Loading..."
+            }));
+
+        var error = cut.Find("#createBeautySalonButton");
+        error.TextContent.Should().Be("Loading...");
     }
 
     private void AssertValueOnBeautySalonTest()

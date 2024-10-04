@@ -1,5 +1,6 @@
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
+using PlanityBlazor.BlazorApp;
 using PlanityBlazor.BlazorApp.BeautySalonContext;
 using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon;
 using PlanityBlazor.BlazorApp.BeautySalonContext.GetBeautySalonsQuery;
@@ -8,9 +9,9 @@ namespace PlanityBlazorApp.BlazorAppTest.CreateBeautySalon;
 
 public class CreateABeautySalonTests : Fixture
 {
-    private IsBeautySalonsCreationError InitStoreBoilerplate()
+    private CreateBeautySalonSelector InitStoreBoilerplate()
     {
-        return new IsBeautySalonsCreationError();
+        return new CreateBeautySalonSelector();
     }
 
     [Fact]
@@ -50,16 +51,17 @@ public class CreateABeautySalonTests : Fixture
         CallSutDispatcher(sut, string.Empty);
 
         var beautySalonState = ServiceProvider.GetRequiredService<IState<BeautySalonState>>();
-        InitStoreBoilerplate().OnNext(beautySalonState.Value).IsError.Should().BeTrue();
+        InitStoreBoilerplate().OnNext(beautySalonState.Value).State.Should().Be(ViewModelState.Error);
     }
 
     [Fact]
     public void BeautySalonOnErrorStateShouldBeEmptyAfterCompleteAction()
     {
         var beautySalonState = ServiceProvider.GetRequiredService<IState<BeautySalonState>>();
-        beautySalonState.Value.Error = "an error";
-
         var sut = ServiceProvider.GetRequiredService<IDispatcher>();
+        //set state in error
+        CallSutDispatcher(sut, string.Empty);
+
 
         var aBeautySalon = "A beauty salon";
         CallSutDispatcher(sut, aBeautySalon);
@@ -67,11 +69,20 @@ public class CreateABeautySalonTests : Fixture
         ExpectStateWithCorrectSalon(aBeautySalon, beautySalonState);
     }
 
+    [Fact]
+    public void ShouldBeLoading()
+    {
+        InitStoreBoilerplate().OnNext(new BeautySalonState()
+        {
+            Progress = true
+        }).State.Should().Be(ViewModelState.Progress);
+    }
+
 
     private void ExpectStateWithCorrectSalon(string aBeautySalon, IState<BeautySalonState> beautySalonState)
     {
+        InitStoreBoilerplate().OnNext(beautySalonState.Value).State.Should().Be(ViewModelState.Completed);
         beautySalonState.Value.Salons.Should().ContainEquivalentOf(new BeautySalon(aBeautySalon));
-        InitStoreBoilerplate().OnNext(beautySalonState.Value).IsError.Should().BeFalse();
     }
 
     private void CallSutDispatcher(IDispatcher sut, string expectedBeautySalon)

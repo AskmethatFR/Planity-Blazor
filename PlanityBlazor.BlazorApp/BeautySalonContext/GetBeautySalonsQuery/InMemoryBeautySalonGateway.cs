@@ -18,13 +18,14 @@ public class InMemoryBeautySalonGateway : IBeautySalonGateway
         return await Task.FromResult(new List<BeautySalon>(All.Select(x => new BeautySalon(x))));
     }
 
-    public bool PostBeautySalon(BeautySalon beautySalon)
+    public async Task<bool> PostBeautySalon(BeautySalon beautySalon)
     {
         if (PostReturnsError)
         {
             return false;
         }
 
+        await Task.Delay(_delay);
         All.Add(beautySalon.Name);
         return true;
     }

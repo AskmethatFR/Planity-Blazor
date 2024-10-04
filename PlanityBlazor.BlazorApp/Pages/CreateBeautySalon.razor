@@ -1,8 +1,36 @@
 @page "/CreateBeautySalon"
+@using PlanityBlazor.BlazorApp.BeautySalonContext
+@using PlanityBlazor.BlazorApp.BeautySalonContext.CreateBeautySalon
 @using PlanityBlazor.BlazorApp.Components
+@using PlanityBlazor.BlazorApp.Shared.Reactive
+@inject AppSelector<BeautySalonState, CreateBeautySalonViewModel> AppSelector
+@implements IDisposable
 
-<CreateBeautySalonComponent/>
+<CreateBeautySalonComponent CreateBeautySalonViewModel="_createBeautySalonViewModel"/>
 
 @code {
+    private IDisposable _subscription;
+    private CreateBeautySalonViewModel _createBeautySalonViewModel = new CreateBeautySalonViewModel();
+
+    protected override void OnInitialized()
+    {
+        OnNext();
+        _subscription = AppSelector.Subscribe(OnNext());
+    }
+
+
+    private Action<CreateBeautySalonViewModel> OnNext()
+    {
+        return viewModel =>
+        {
+            _createBeautySalonViewModel = viewModel;
+            StateHasChanged();
+        };
+    }
+
+    public void Dispose()
+    {
+        _subscription.Dispose();
+    }
 
 }

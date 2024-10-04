@@ -14,7 +14,7 @@ public class CreateABeautySalonActionEffect
     }
 
     [EffectMethod]
-    public Task HandleCreateABeautySalonAction(CreateABeautySalonAction action, IDispatcher dispatcher)
+    public async Task HandleCreateABeautySalonAction(CreateABeautySalonAction action, IDispatcher dispatcher)
     {
         try
         {
@@ -23,29 +23,31 @@ public class CreateABeautySalonActionEffect
         catch (Exception e)
         {
             dispatcher.Dispatch(new ErrorOnCreatingBeautySalon(e.Message));
-            return Task.CompletedTask;
+            return;
         }
 
 
         var beautySalon = new BeautySalon(action.BeautySalon);
-        var result = _beautySalonGateway.PostBeautySalon(beautySalon);
+        var result = await _beautySalonGateway.PostBeautySalon(beautySalon);
         if (result)
         {
             dispatcher.Dispatch(new CreateABeautySalonCompleteAction(beautySalon));
         }
-
-        return Task.CompletedTask;
     }
 
     [ReducerMethod]
-    public static BeautySalonState ReduceCreateABeautySalonAction(BeautySalonState state,
+    public static BeautySalonState ReduceCreateABeautySalonCompleteAction(BeautySalonState state,
         CreateABeautySalonCompleteAction action) =>
-        state with { Salons = state.Salons.Append(action.BeautySalon).ToList(), Error = String.Empty };
+        state with
+        {
+            Salons = state.Salons.Append(action.BeautySalon).ToList(), Error = String.Empty, Success = true,
+            Progress = false
+        };
 
     [ReducerMethod]
     public static BeautySalonState ReduceErrorOnCreatingBeautySalon(BeautySalonState state,
         ErrorOnCreatingBeautySalon action) =>
-        state with { Error = action.Error };
+        state with { Error = action.Error, Success = false };
 }
 
 public record ErrorOnCreatingBeautySalon(string Error);
@@ -69,6 +71,11 @@ public class CreateABeautySalonAction : AbstractValidator<CreateABeautySalonActi
             throw new Exception(result.ToString());
         }
     }
+
+    [ReducerMethod]
+    public static BeautySalonState Reduce(BeautySalonState state,
+        CreateABeautySalonAction action) =>
+        state with { Error = String.Empty, Success = false, Progress = true };
 }
 
 public record CreateABeautySalonCompleteAction(BeautySalon BeautySalon);
