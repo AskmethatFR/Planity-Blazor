@@ -9,5 +9,5 @@ public record BeautySalonState
     public bool Progress { get; init; } = false;
     public List<BeautySalon> Salons { get; init; } = new List<BeautySalon>();
     public string Error { get; init; } = string.Empty;
-    public bool Success { get; set; }
+    public bool Success { get; init; }
 }
